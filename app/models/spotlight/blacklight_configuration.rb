@@ -85,7 +85,6 @@ module Spotlight
 
         # Add any custom fields
         config.index_fields.merge! custom_index_fields(config)
-        config.index_fields = Hash[config.index_fields.sort_by { |k, _v| field_weight(index_fields, k) }]
         config.index_fields.reject! { |_k, v| v.if == false }
 
         # Update with customizations
@@ -128,6 +127,10 @@ module Spotlight
           v.normalize! config
           v.validate!
         end
+
+        ##
+        # Sort after the show fields have also been added
+        config.index_fields = Hash[config.index_fields.sort_by { |k, _v| field_weight(index_fields, k) }]
 
         config.show_fields = config.index_fields
 
@@ -328,12 +331,14 @@ module Spotlight
     # Check to see whether config.view.foobar.title_only_by_default is available
     def title_only_by_default?(view)
       return false if [:show, :enabled].include?(view)
+
       title_only = default_blacklight_config.view.send(:[], view).try(:title_only_by_default)
       title_only.nil? ? false : title_only
     end
 
     def set_show_field_defaults(field)
       return unless index_fields.blank?
+
       views = default_blacklight_config.view.keys
       field.merge! Hash[views.map { |v| [v, false] }]
       field.enabled = true
