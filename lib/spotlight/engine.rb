@@ -242,7 +242,9 @@ module Spotlight
     # make blacklight configuration play nice with bootstrap_form
     Blacklight::OpenStructWithHashAccess.send(:extend, ActiveModel::Translation)
 
-    config.exhibit_themes = ['default']
+    config.exhibit_themes =
+      %w[default] +
+      ENV.fetch('SPOTLIGHT_THEMES') { '' }.split(',')
 
     # Overriding the riiif url_helpers requires a module with at least the
     # following methods:
