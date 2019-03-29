@@ -1,4 +1,4 @@
-describe '_user_util_links', type: :view do
+describe 'shared/_user_util_links', type: :view do
   let(:current_exhibit) { FactoryBot.create(:exhibit) }
   before do
     allow(view).to receive(:blacklight_config).and_return(Blacklight::Configuration.new)
