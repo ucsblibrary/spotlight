@@ -6,6 +6,7 @@ module Spotlight
   module MainAppHelpers
     include Spotlight::NavbarHelper
     include Spotlight::MastheadHelper
+    include Spotlight::ThemeHelper
 
     def cache_key_for_spotlight_exhibits
       "#{Spotlight::Exhibit.count}/#{Spotlight::Exhibit.maximum(:updated_at).try(:utc)}"
@@ -34,38 +35,6 @@ module Spotlight
         super
       else
         show_presenter(document)
-      end
-    end
-
-    def exhibit_stylesheet_link_tag(tag)
-      Deprecation.warn self, 'exhibit_stylesheet_link_tag has been deprecated and will be removed in Spotlight 3.0.  '\
-                             'Use themed_stylesheet_link_tag instead.'
-      themed_stylesheet_link_tag(tag)
-    end
-
-    def themed_stylesheet_link_tag(tag)
-      return stylesheet_link_tag(tag) if current_theme.nil?
-
-      if Spotlight::Engine.config.exhibit_themes.include?(current_theme)
-        stylesheet_link_tag "#{tag}_#{current_theme}"
-      else
-        Rails.logger.warn "Exhibit theme '#{current_theme}' not in white-list of available themes: #{Spotlight::Engine.config.exhibit_themes}"
-        stylesheet_link_tag(tag)
-      end
-    end
-
-    def current_exhibit_theme
-      Deprecation.warn self, 'current_exhibit_theme has been deprecated and will be removed in Spotlight 3.0.  '\
-                             'Use current_theme instead.'
-      current_theme
-    end
-
-    def current_theme
-      # prioritize exhibit themes over site-wide themes
-      if current_exhibit && current_exhibit.theme.present?
-        current_exhibit.theme
-      elsif current_site.theme.present?
-        current_site.theme
       end
     end
   end
