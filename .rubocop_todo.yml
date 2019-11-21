@@ -270,6 +270,7 @@ RSpec/PredicateMatcher:
     - 'spec/controllers/spotlight/catalog_controller_spec.rb'
     - 'spec/controllers/spotlight/exhibits_controller_spec.rb'
     - 'spec/features/feature_page_spec.rb'
+    - 'spec/features/exhibit_deletion_spec.rb'
     - 'spec/helpers/spotlight/navbar_helper_spec.rb'
     - 'spec/helpers/spotlight/pages_helper_spec.rb'
     - 'spec/lib/spotlight/controller_spec.rb'
