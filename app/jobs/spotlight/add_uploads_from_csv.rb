@@ -16,6 +16,7 @@ module Spotlight
       encoded_csv(csv_data).each do |row|
         url = row.delete('url')
         next unless url.present?
+        raise InvalidUploadURLError unless Faraday.head(url).status == 200
 
         resource = Spotlight::Resources::Upload.new(
           data: row,
@@ -35,5 +36,11 @@ module Spotlight
         end.compact.to_h
       end.compact
     end
+  end
+end
+
+class InvalidUploadURLError < StandardError
+  def message
+    "The URL provided is not accessible and cannot be ingested into the exhibit"
   end
 end
